@@ -3,6 +3,11 @@ import "./style.css";
 // Elements setup
 
 /**
+ * Html body
+ */
+const body = document.querySelector("body") ?? null;
+
+/**
  * Top bar with the logo, links, call to action etc.
  */
 const navbar = document.getElementById("navbar") ?? null;
