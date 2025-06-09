@@ -1,2 +1,23 @@
 @import "tailwindcss";
-@import "@tailwindcss/typography";
+
+@layer utilities {
+  #navbar {
+    @apply transition-transform duration-300 ease-in-out;
+  }
+  #navbar.collapsed {
+    @apply translate-y-[-90%];
+  }
+  #navbar:not(.collapsed) {
+    @apply translate-y-0;
+  }
+
+  #slideover {
+    @apply transition-transform duration-300 ease-in-out;
+  }
+  #slideover:not(.open) {
+    @apply translate-x-[100%];
+  }
+  #slideover.open {
+    @apply translate-x-0;
+  }
+}

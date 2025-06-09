@@ -9,7 +9,7 @@
   <body class="">
     <nav
       id="navbar"
-      class="grid grid-cols-3 w-full items-center p-8 sticky top-0 bg-white z-50 shadow-sm max-sm:grid-cols-2"
+      class="grid grid-cols-3 w-full items-center p-8 sticky top-0 bg-white z-30 shadow-sm max-sm:grid-cols-2"
     >
       <!-- Left side -->
       <div>
@@ -26,11 +26,21 @@
       <!-- Right side-->
       <div class="justify-self-end flex gap-4">
         <button type="submit" class="p-3 bg-slate-200 cursor-pointer">Click me</button>
-        <button id="slideoverOpenBtn" class="p-3 bg-slate-200 cursor-pointer">🍔</button>
+        <button id="slideoverOpenBtn" class="p-3 bg-slate-200 cursor-pointer sm:hidden">🍔</button>
       </div>
     </nav>
-    <div id="slideover"></div>
-    <div id="backdrop"></div>
+    <nav
+      id="slideover"
+      class="fixed right-0 p-8 top-0 max-w-full w-[50%] h-screen bg-slate-100 z-50"
+    >
+      <button id="slideoverCloseBtn" class="float-end p-3 bg-slate-200 cursor-pointer">❌</button>
+      <ul class="justify-self-center flex flex-col gap-4 h-full justify-center">
+        <li><a href="#" class="underline">Home</a></li>
+        <li><a href="#" class="underline">About</a></li>
+        <li><a href="#" class="underline">Projects</a></li>
+      </ul>
+    </nav>
+    <div id="backdrop" class="z-40"></div>
 
     <main class="prose prose-slate max-w-screen-md mx-auto p-8 pb-[4000px]">
       <h1>Lorem Ipsum Dolor Sit Amet</h1>

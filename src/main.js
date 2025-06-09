@@ -27,7 +27,7 @@ let lastScrollPos = 0;
 window.addEventListener("scroll", () => {
   let currScrollPos = window.scrollY;
 
-  lastScrollPos > currScrollPos
+  lastScrollPos < currScrollPos
     ? navbar?.classList.add("collapsed")
     : navbar?.classList.remove("collapsed");
 
@@ -35,13 +35,14 @@ window.addEventListener("scroll", () => {
 });
 
 // Open and close the slideover
-
-openBtn?.addEventListener("click", () => {});
-closeBtn?.addEventListener("click", () => {});
+openBtn?.addEventListener("click", () => openSlideover());
+closeBtn?.addEventListener("click", () => closeSlideover());
 
 function openSlideover() {
   slideover.classList.add("open");
+  console.log("Opened");
 }
 function closeSlideover() {
   slideover.classList.remove("open");
+  console.log("Closed");
 }
