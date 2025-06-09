@@ -4,6 +4,11 @@ import navigation from "./navigation";
 // Elements setup
 
 /**
+ * The document's body
+ */
+const body = document.querySelector("body");
+
+/**
  * Wrapper containing everything other than the header with navigation itself
  */
 const page = document.getElementById("page");
@@ -71,55 +76,57 @@ window.addEventListener("scroll", () => {
 });
 
 // Open and close the slideover
-openBtn.addEventListener("click", () => openSlideover());
-closeBtn.addEventListener("click", () => closeSlideover());
-backdrop.addEventListener("click", () => closeSlideover());
+openBtn.addEventListener("click", () => {
+  openSlideover();
+  updateState();
+});
+closeBtn.addEventListener("click", () => {
+  closeSlideover();
+  updateState();
+});
+backdrop.addEventListener("click", () => {
+  closeSlideover();
+  updateState();
+});
 navLinks.forEach((item) => {
-  item.addEventListener("click", () => closeSlideover());
+  item.addEventListener("click", () => {
+    closeSlideover();
+    updateState();
+  });
 });
 window.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") closeSlideover();
+  if (e.key === "Escape") {
+    closeSlideover();
+    updateState();
+  }
 });
+window.addEventListener("resize", updateState);
 
 function openSlideover() {
   slideover.classList.add("open");
-  slideover.removeAttribute("inert");
-
   backdrop.classList.add("shown");
-  backdrop.removeAttribute("inert");
-
-  page.setAttribute("inert", "true");
-  navbar.setAttribute("inert", "true");
 }
 function closeSlideover() {
   slideover.classList.remove("open");
-  slideover.setAttribute("inert", "true");
-
   backdrop.classList.remove("shown");
-  backdrop.setAttribute("inert", "true");
-
-  page.removeAttribute("inert");
-  navbar.removeAttribute("inert");
 }
 
 // Update navigation based on breakpoint
-window?.addEventListener("resize", () => updateState());
-
 function updateState() {
-  const isMobile = media?.matches ?? false;
-  const isOpen = slideover?.classList.contains("open") ?? false;
+  const isMobile = media.matches;
+  const isOpen = slideover.classList.contains("open");
+  setNavStates({ isMobile, isOpen });
+}
 
-  if (isMobile) {
-    if (isOpen) {
-      slideover?.removeAttribute("inert");
-      backdrop?.removeAttribute("inert");
-      page?.setAttribute("inert", "true");
-    }
+function setNavStates({ isMobile, isOpen }) {
+  slideover.toggleAttribute("inert", !(isMobile && isOpen));
+  backdrop.toggleAttribute("inert", !(isMobile && isOpen));
+  page.toggleAttribute("inert", isMobile && isOpen);
+  navbar.toggleAttribute("inert", isMobile && isOpen);
+
+  if (isMobile && isOpen) {
+    body.style.overflow = "hidden";
   } else {
-    if (isOpen) {
-      slideover?.setAttribute("inert", "true");
-      backdrop?.setAttribute("inert", "true");
-      page?.removeAttribute("inert");
-    }
+    body.style.overflow = "";
   }
 }
