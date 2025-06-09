@@ -28,3 +28,7 @@ The navigation expects all content of the page **other than the navigation** to 
 If you skip this step, the navigation will **not trap focus when opened!**
 
 Once you update your HTML accordingly, you may define the navbar layout inside of `/src/navigation.js`. There, you'll find a simple schema representing your navigation structure. This navbar is able to be nested **infinitely**.
+
+In order to customize the breakpoint, you need to edit the following:
+
+- `const media = `

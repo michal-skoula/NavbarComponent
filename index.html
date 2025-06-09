@@ -7,94 +7,102 @@
     <title>Navbar</title>
   </head>
   <body class="">
-    <nav
-      id="navbar"
-      class="sticky top-0 z-30 grid w-full grid-cols-3 items-center bg-white p-8 shadow-sm max-sm:grid-cols-2"
-    >
-      <!-- Left side -->
-      <div>
-        <a href="#" class="inline-block justify-self-start"> Logo </a>
-      </div>
-
-      <!-- Center -->
-      <ul class="flex gap-4 justify-self-center max-sm:hidden">
-        <li><a href="#" class="underline">Home</a></li>
-        <li><a href="#" class="underline">About</a></li>
-        <li><a href="#" class="underline">Projects</a></li>
-      </ul>
-
-      <!-- Right side-->
-      <div class="flex gap-4 justify-self-end">
-        <button type="submit" class="cursor-pointer bg-slate-200 p-3">
-          Click me
-        </button>
-        <button
-          id="slideoverOpenBtn"
-          class="cursor-pointer bg-slate-200 p-3 sm:hidden"
-        >
-          🍔
-        </button>
-      </div>
-    </nav>
-    <nav
-      id="slideover"
-      class="fixed top-0 right-0 z-50 h-screen w-[50%] max-w-full bg-slate-100 p-8"
-    >
-      <button
-        id="slideoverCloseBtn"
-        class="float-end cursor-pointer bg-slate-200 p-3"
+    <header id="header" class="sticky top-0 z-30">
+      <nav
+        id="navbar"
+        class="grid w-full grid-cols-3 items-center bg-white p-8 shadow-sm max-sm:grid-cols-2"
       >
-        ❌
-      </button>
-      <ul class="flex h-full flex-col justify-center gap-4 justify-self-center">
-        <li><a href="#" class="underline">Home</a></li>
-        <li><a href="#" class="underline">About</a></li>
-        <li><a href="#" class="underline">Projects</a></li>
-      </ul>
-    </nav>
-    <div id="backdrop" class="z-40"></div>
+        <!-- Left side -->
+        <div>
+          <a href="#" class="inline-block justify-self-start"> Logo </a>
+        </div>
 
-    <main class="prose prose-slate mx-auto max-w-screen-md p-8 pb-[4000px]">
-      <h1>Lorem Ipsum Dolor Sit Amet</h1>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-        varius enim in eros elementum tristique.
-      </p>
+        <!-- Center -->
+        <ul class="flex gap-4 justify-self-center max-sm:hidden">
+          <li><a href="#" class="underline">Home</a></li>
+          <li><a href="#" class="underline">About</a></li>
+          <li><a href="#" class="underline">Projects</a></li>
+        </ul>
 
-      <h2>Sed Do Eiusmod Tempor</h2>
-      <p>
-        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-        dolore eu fugiat nulla pariatur.
-      </p>
+        <!-- Right side-->
+        <div class="flex gap-4 justify-self-end">
+          <button type="submit" class="cursor-pointer bg-slate-200 p-3">
+            Click me
+          </button>
+          <button
+            id="slideoverOpenBtn"
+            class="cursor-pointer bg-slate-200 p-3 sm:hidden"
+          >
+            🍔
+          </button>
+        </div>
+      </nav>
+      <nav
+        inert="true"
+        id="slideover"
+        class="fixed top-0 right-0 z-50 h-screen w-[50%] max-w-full bg-slate-100 p-8"
+      >
+        <button
+          id="slideoverCloseBtn"
+          class="float-end cursor-pointer bg-slate-200 p-3"
+        >
+          ❌
+        </button>
+        <ul
+          class="flex h-full flex-col justify-center gap-4 justify-self-center"
+        >
+          <li><a href="#" class="underline">Home</a></li>
+          <li><a href="#" class="underline">About</a></li>
+          <li><a href="#" class="underline">Projects</a></li>
+        </ul>
+      </nav>
+      <div id="backdrop" class="fixed inset-0 z-40" inert="true"></div>
+    </header>
 
-      <h3>Consectetur Adipiscing Elit</h3>
-      <p>
-        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-        officia deserunt mollit anim id est laborum.
-      </p>
+    <div id="page">
+      <main class="prose prose-slate mx-auto max-w-screen-md p-8 pb-[4000px]">
+        <h1>Lorem Ipsum Dolor Sit Amet</h1>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+          varius enim in eros elementum tristique.
+        </p>
 
-      <blockquote>
-        <p>“Lorem ipsum dolor sit amet, consectetur adipiscing elit.”</p>
-      </blockquote>
+        <h2>Sed Do Eiusmod Tempor</h2>
+        <p>
+          Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+          dolore eu fugiat nulla pariatur.
+        </p>
 
-      <h4>Ullamco Laboris Nisi</h4>
-      <ul>
-        <li>First item in unordered list</li>
-        <li>Second item with more content to test wrapping</li>
-        <li>Third item</li>
-      </ul>
+        <h3>Consectetur Adipiscing Elit</h3>
+        <p>
+          Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
+          officia deserunt mollit anim id est laborum.
+        </p>
 
-      <ol>
-        <li>First item in ordered list</li>
-        <li>Second item</li>
-        <li>Third item</li>
-      </ol>
+        <blockquote>
+          <p>“Lorem ipsum dolor sit amet, consectetur adipiscing elit.”</p>
+        </blockquote>
 
-      <p>
-        <strong>Bold text</strong>, <em>italic text</em>, and
-        <a href="#">a link for good measure</a>.
-      </p>
-    </main>
+        <h4>Ullamco Laboris Nisi</h4>
+        <ul>
+          <li>First item in unordered list</li>
+          <li>Second item with more content to test wrapping</li>
+          <li>Third item</li>
+        </ul>
+
+        <ol>
+          <li>First item in ordered list</li>
+          <li>Second item</li>
+          <li>Third item</li>
+        </ol>
+
+        <p>
+          <strong>Bold text</strong>, <em>italic text</em>, and
+          <a href="#">a link for good measure</a>.
+        </p>
+      </main>
+    </div>
+
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
