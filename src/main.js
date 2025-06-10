@@ -105,15 +105,22 @@ window.addEventListener("keydown", (e) => {
 });
 window.addEventListener("resize", updateState);
 
+// Waits for transition to finish, then focuses
+slideover.addEventListener("transitionend", () => {
+  slideover.classList.contains("open") ? closeBtn.focus() : openBtn.focus();
+});
+
 function openSlideover() {
   slideover.classList.add("open");
   backdrop.classList.add("shown");
   openBtn.setAttribute("aria-expanded", "true");
+  console.log("open");
 }
 function closeSlideover() {
   slideover.classList.remove("open");
   backdrop.classList.remove("shown");
   openBtn.setAttribute("aria-expanded", "false");
+  console.log("close");
 }
 
 // Update navigation based on breakpoint
