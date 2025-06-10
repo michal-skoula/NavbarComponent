@@ -71,8 +71,8 @@ window.addEventListener("scroll", () => {
   let currScrollPos = window.scrollY;
 
   lastScrollPos < currScrollPos
-    ? navbar?.classList.add("collapsed")
-    : navbar?.classList.remove("collapsed");
+    ? navbar.classList.add("collapsed")
+    : navbar.classList.remove("collapsed");
 
   lastScrollPos = currScrollPos;
 });

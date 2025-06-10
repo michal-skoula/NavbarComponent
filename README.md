@@ -31,4 +31,15 @@ Once you update your HTML accordingly, you may define the navbar layout inside o
 
 In order to customize the breakpoint, you need to edit the following:
 
-- `const media = `
+- js media query breakpoint
+- change the max-sm and sm properties or redefine the value in tailwind config
+
+## QoL and accessibility features
+
+- Fully navigatable via keyboard, traps focus as expected
+- Additional options to close navigation by clicking away or by pressing escape
+- Has all necessary ARIA accessibility attributes for screen reader support
+- Remembers state when switching between desktop and mobile
+- Hides away to make room on smaller devices
+- Skip to content for keyboard users
+- Hides away when pressing anchor links
