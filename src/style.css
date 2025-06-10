@@ -8,22 +8,3 @@
     @apply scroll-smooth;
   }
 }
-
-@layer utilities {
-  .has-children {
-    @apply font-medium;
-  }
-  .toggled > ul,
-  .focused > ul,
-  .hovered > ul {
-    @apply flex!;
-  }
-}
-
-.cock + ul {
-  @apply bg-red-500!;
-}
-
-:focus {
-  @apply z-50! bg-red-600!;
-}

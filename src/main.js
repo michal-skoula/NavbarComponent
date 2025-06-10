@@ -114,13 +114,11 @@ function openSlideover() {
   slideover.classList.add("open");
   backdrop.classList.add("shown");
   openBtn.setAttribute("aria-expanded", "true");
-  console.log("open");
 }
 function closeSlideover() {
   slideover.classList.remove("open");
   backdrop.classList.remove("shown");
   openBtn.setAttribute("aria-expanded", "false");
-  console.log("close");
 }
 
 // Update navigation based on breakpoint
@@ -144,3 +142,91 @@ function setNavStates({ isMobile, isOpen }) {
     body.style.overflow = "";
   }
 }
+
+// Submenu logic
+
+/** @type HTMLElement[] */
+const dropdowns = document.querySelectorAll("li[nav-submenu]");
+
+dropdowns.forEach((d) => {
+  /** @type HTMLElement */
+  const dButton = d.querySelector("& > button");
+
+  /** @type HTMLElement */
+  const dList = d.querySelector("& > ul");
+
+  /** @type HTMLElement[] */
+  const items = dList.querySelectorAll("& > li");
+
+  // Set IDs for keyboard navigation
+  let counter = 1;
+  items.forEach((item) => {
+    item.setAttribute("nav-child-id", counter);
+    counter++;
+  });
+
+  // Event listeners
+  d.addEventListener("mouseover", () => d.classList.add("hovered"));
+  d.addEventListener("mouseout", () => d.classList.remove("hovered"));
+
+  dButton.addEventListener("focusout", () => d.classList.remove("focused"));
+  dButton.addEventListener("focusin", () => d.classList.add("focused"));
+
+  dButton.addEventListener("click", () => {
+    d.classList.toggle("toggled");
+
+    getDropDownState().toggled ? openDropdown(d) : closeDropdown(d);
+  });
+
+  d.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault;
+      openDropdown(d);
+    }
+  });
+
+  function getDropDownState() {
+    const isFocused = d.classList.contains("focused");
+    const isToggled = d.classList.contains("toggled");
+
+    return { focused: isFocused, toggled: isToggled };
+  }
+
+  // Pressing esc when
+  window.addEventListener("keydown", (e) => {
+    const state = getDropDownState();
+
+    if (e.key === "Escape" && state.toggled) {
+      // Remove ope
+      d.classList.remove("toggled");
+    }
+  });
+});
+
+function openDropdown(dropdown) {
+  dropdown.classList.add("toggled");
+  dropdown.classList.add("focused");
+}
+function closeDropdown(dropdown) {
+  dropdown.classList.remove("toggled");
+  dropdown.classList.remove("focused");
+  dropdown.classList.remove("hovered");
+}
+
+window.addEventListener("keydown", (e) => {
+  // Close any toggled dropdown when pressing esc
+  if (e.key === "Escape") {
+    dropdowns.forEach((d) => {
+      if (d.classList.contains("toggled") || d.classList.contains("focused")) {
+        closeDropdown(d);
+      }
+    });
+  }
+});
+
+// Right now im thinking .hovered, .focused and .toggled apply exactly the same
+// styles but:
+//    focused can only be removed by unfocusing
+//    hovered can only be removed by unhovering
+//    toggled can be removed by: selecting a new dropdown, pressing esc, clicking away
+//                               i think i can use if not hovered and clicks!

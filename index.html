@@ -27,14 +27,63 @@
 
         <!-- Center -->
         <ul class="flex gap-4 justify-self-center max-sm:hidden">
-          <li><a href="#" class="underline">Home</a></li>
-          <li><a href="#" class="underline">About</a></li>
-          <li class="relative" nav-submenu="true">
-            <!-- This is the button for toggling -->
-            <button href="#" class="peer underline">Projects</button>
-            <!-- These are the children that are toggled-->
+          <li class="">
+            <a href="#" class="inline-block p-3 underline">Home</a>
+          </li>
+          <li class="">
+            <a href="#" class="inline-block p-3 underline">About</a>
+          </li>
+
+          <li class="group relative">
+            <button href="#test" class="p-3">Projekty</button>
+            <!-- Dropdown buffer zone: now between button and dropdown -->
+            <div
+              class="inset-0 -bottom-2 left-0 z-40 w-[250%] bg-orange-300/0 group-hover:absolute"
+              style="clip-path: polygon(100% 100%, 0 0, 0 100%, 100% 100%)"
+            ></div>
             <ul
-              class="absolute top-8 hidden flex-col gap-3 bg-slate-200 p-3"
+              class="absolute top-[110%] left-0 z-50 hidden w-[max-content] flex-col rounded-xl bg-slate-200 p-4 group-hover:flex [&>li]:hover:bg-slate-300"
+            >
+              <li>
+                <a href="#" class="inline-block p-3 underline"
+                  >Modernizace bytového komplexu</a
+                >
+              </li>
+              <li>
+                <a href="#" class="inline-block p-3 underline"
+                  >Design japosnské zahrady</a
+                >
+              </li>
+              <li>
+                <a href="#" class="inline-block p-3 underline"
+                  >Vedení nového potrubí</a
+                >
+              </li>
+              <li>
+                <a href="#" class="inline-block p-3 underline"
+                  >Modernizace bytového komplexu</a
+                >
+              </li>
+              <li>
+                <a href="#" class="inline-block p-3 underline"
+                  >Design japosnské zahrady</a
+                >
+              </li>
+              <li>
+                <a href="#" class="inline-block p-3 underline"
+                  >Vedení nového potrubí</a
+                >
+              </li>
+            </ul>
+          </li>
+
+          <!-- Navigation with submenu -->
+          <!-- <li class="group relative h-max" nav-submenu="true"> -->
+          <!-- This is the button for toggling -->
+          <!-- <button href="#" class="peer underline">Projects</button> -->
+          <!-- These are the children that are toggled-->
+          <!-- <ul
+              class="absolute top-4 hidden flex-col gap-3 bg-slate-200 p-3 group-hover:flex group-hover:bg-amber-300!"
               aria-hidden="true"
               inert="true"
             >
@@ -42,7 +91,7 @@
               <li><a href="#" aria-hidden="true">Test</a></li>
               <li><a href="#" aria-hidden="true">Test</a></li>
             </ul>
-          </li>
+          </li> -->
         </ul>
 
         <!-- Right side-->
