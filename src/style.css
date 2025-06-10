@@ -1,1 +1,10 @@
 @import "tailwindcss";
+
+@theme {
+}
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+}

@@ -11,10 +11,10 @@ const body = document.querySelector("body");
 /**
  * Wrapper containing everything other than the header with navigation itself
  */
-const page = document.getElementById("page");
-if (!page)
+const content = document.getElementById("content");
+if (!content)
   throw new Error(
-    "[navbar] No element with id of page found! Focus trap will not work.",
+    "[navbar] No element with id of content found! Focus trap will not work.",
   );
 
 /**
@@ -58,6 +58,8 @@ const closeBtn = document.getElementById("slideoverCloseBtn");
 if (!closeBtn)
   throw new Error("[navbar] No element with id of slideoverCloseBtn found!");
 
+const skipNavigation = document.getElementById("skipNavigation");
+
 /**
  * Breakpoint from where to start switch to and from mobile navigation properties
  */
@@ -74,6 +76,7 @@ window.addEventListener("scroll", () => {
 
   lastScrollPos = currScrollPos;
 });
+skipNavigation.addEventListener("click", closeSlideover);
 
 // Open and close the slideover
 openBtn.addEventListener("click", () => {
@@ -105,10 +108,12 @@ window.addEventListener("resize", updateState);
 function openSlideover() {
   slideover.classList.add("open");
   backdrop.classList.add("shown");
+  openBtn.setAttribute("aria-expanded", "true");
 }
 function closeSlideover() {
   slideover.classList.remove("open");
   backdrop.classList.remove("shown");
+  openBtn.setAttribute("aria-expanded", "false");
 }
 
 // Update navigation based on breakpoint
@@ -116,12 +121,14 @@ function updateState() {
   const isMobile = media.matches;
   const isOpen = slideover.classList.contains("open");
   setNavStates({ isMobile, isOpen });
+
+  if (isMobile) navbar.classList.remove("collapsed");
 }
 
 function setNavStates({ isMobile, isOpen }) {
   slideover.toggleAttribute("inert", !(isMobile && isOpen));
   backdrop.toggleAttribute("inert", !(isMobile && isOpen));
-  page.toggleAttribute("inert", isMobile && isOpen);
+  content.toggleAttribute("inert", isMobile && isOpen);
   navbar.toggleAttribute("inert", isMobile && isOpen);
 
   if (isMobile && isOpen) {

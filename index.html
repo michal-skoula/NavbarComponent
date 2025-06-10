@@ -8,9 +8,16 @@
   </head>
   <body class="">
     <header id="header" class="sticky top-0 z-30">
+      <a
+        href="#content"
+        id="skipNavigation"
+        class="absolute top-4 left-4 z-50 bg-slate-300 p-3 opacity-0 outline-slate-600 focus:opacity-100 focus:outline-2"
+        >Skip to main content</a
+      >
+
       <nav
         id="navbar"
-        class="grid w-full grid-cols-3 items-center bg-white p-8 shadow-sm transition-transform duration-300 ease-in-out max-sm:translate-y-0 max-sm:grid-cols-2 [.collapsed]:max-sm:translate-y-[-90%]"
+        class="grid w-full grid-cols-3 items-center bg-white p-8 shadow-sm transition-transform duration-300 ease-in-out max-sm:translate-y-0 max-sm:grid-cols-2 [&.collapsed]:max-sm:translate-y-[-90%]"
       >
         <!-- Left side -->
         <div>
@@ -26,25 +33,32 @@
 
         <!-- Right side-->
         <div class="flex gap-4 justify-self-end">
-          <button type="submit" class="cursor-pointer bg-slate-200 p-3">
+          <a href="#" class="cursor-pointer bg-slate-200 p-3 no-underline">
             Click me
-          </button>
+          </a>
+
           <button
             id="slideoverOpenBtn"
             class="cursor-pointer bg-slate-200 p-3 sm:hidden"
+            aria-label="Open navigation"
+            aria-expanded="false"
+            aria-controls="slideover"
           >
             🍔
           </button>
         </div>
       </nav>
+
       <nav
         inert="true"
         id="slideover"
-        class="fixed top-0 right-0 z-50 h-screen w-[50%] max-w-full translate-x-[100%] bg-slate-100 p-8 transition-transform duration-300 ease-in-out [.open]:max-sm:translate-x-0"
+        class="fixed top-0 right-0 z-50 h-screen w-[50%] max-w-full translate-x-[100%] bg-slate-100 p-8 transition-transform duration-300 ease-in-out [&.open]:max-sm:translate-x-0"
       >
         <button
           id="slideoverCloseBtn"
           class="float-end cursor-pointer bg-slate-200 p-3"
+          aria-label="Close navigation"
+          aria-controls="slideover"
         >
           ❌
         </button>
@@ -58,12 +72,13 @@
       </nav>
       <div
         id="backdrop"
-        class="[] fixed inset-0 z-40 opacity-0 transition-opacity duration-200 ease-in-out [.shown]:max-sm:bg-black [.shown]:max-sm:opacity-70"
+        class="fixed inset-0 z-40 opacity-0 transition-opacity duration-200 ease-in-out max-sm:bg-black [&.shown]:max-sm:opacity-70"
         inert="true"
+        aria-hidden="true"
       ></div>
     </header>
 
-    <div id="page">
+    <div id="content" class="">
       <main class="prose prose-slate mx-auto max-w-screen-md p-8 pb-[4000px]">
         <h1>Lorem Ipsum Dolor Sit Amet</h1>
         <p>
