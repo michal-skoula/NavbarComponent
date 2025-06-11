@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
+/* Nav specific styles - note, you cannot set a css variable here */
 @theme {
+  --breakpoint-nav: 64rem;
 }
 
 @layer base {

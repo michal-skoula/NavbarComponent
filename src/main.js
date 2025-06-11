@@ -1,7 +1,10 @@
 import "./style.css";
-import navigation from "./navigation";
 
-// Elements setup
+/**
+ * ------------------
+ *   Elements setup
+ * ------------------
+ */
 
 /**
  * The document's body
@@ -63,7 +66,10 @@ const skipNavigation = document.getElementById("skipNavigation");
 /**
  * Breakpoint from where to start switch to and from mobile navigation properties
  */
-const media = window.matchMedia("(width <= 640px)"); // tailwind:sm
+const navBreakpoint = getComputedStyle(document.documentElement)
+  .getPropertyValue("--breakpoint-nav")
+  .trim();
+const media = window.matchMedia(`(width <= ${navBreakpoint})`);
 
 // Hide navbar on scroll
 let lastScrollPos = 0;
@@ -78,7 +84,12 @@ window.addEventListener("scroll", () => {
 });
 skipNavigation.addEventListener("click", closeSlideover);
 
-// Open and close the slideover
+/**
+ * -------------------
+ *   Slideover logic
+ * -------------------
+ */
+
 openBtn.addEventListener("click", () => {
   openSlideover();
   updateState();
@@ -105,7 +116,7 @@ window.addEventListener("keydown", (e) => {
 });
 window.addEventListener("resize", updateState);
 
-// Waits for transition to finish, then focuses
+// Waits for transition to finish, then focus button to change state
 slideover.addEventListener("transitionend", () => {
   slideover.classList.contains("open") ? closeBtn.focus() : openBtn.focus();
 });
@@ -136,18 +147,54 @@ function setNavStates({ isMobile, isOpen }) {
   content.toggleAttribute("inert", isMobile && isOpen);
   navbar.toggleAttribute("inert", isMobile && isOpen);
 
-  if (isMobile && isOpen) {
-    body.style.overflow = "hidden";
-  } else {
-    body.style.overflow = "";
-  }
+  isMobile && isOpen
+    ? (body.style.overflow = "hidden")
+    : (body.style.overflow = "");
 }
 
-// Submenu logic
+/**
+ * ------------------
+ *   Dropdown logic
+ * ------------------
+ */
 
 /** @type HTMLElement[] */
 const dropdowns = document.querySelectorAll("li[nav-submenu]");
 
+// Closes previously open dropdown before opening the current one
+function closeAllDropdowns() {
+  dropdowns.forEach((d) => {
+    d.classList.remove("open");
+    //TODO: remove aria-open attribute
+  });
+}
+
+// Closes dropdown automatically when clicking elsewhere
+document.addEventListener("click", (e) => {
+  dropdowns.forEach((d) => {
+    if (d === e.target || d.contains(e.target)) return;
+    closeAllDropdowns();
+  });
+});
+
+// Listen for focus changes on the whole document
+// document.addEventListener("focusin", (e) => {
+//   console.log(e.target);
+//   dropdowns.forEach((d) => {
+//     if (!(d === e.target || d.contains(e.target))) {
+//       console.log("out");
+//     }
+//     return;
+//   });
+//   // dropdowns.forEach((d) => {
+//   //   // If the newly focused element is NOT the dropdown or a child, close it
+//   //   if (!(d === e.target || d.contains(e.target))) {
+//   //     d.classList.remove("open");
+//   //   }
+//   // });
+// });
+
+// Dropdown setup and logic
 dropdowns.forEach((d) => {
   /** @type HTMLElement */
   const dButton = d.querySelector("& > button");
@@ -156,7 +203,7 @@ dropdowns.forEach((d) => {
   const dList = d.querySelector("& > ul");
 
   /** @type HTMLElement[] */
-  const items = dList.querySelectorAll("& > li");
+  const items = dList.querySelectorAll("& > li > a");
 
   // Set IDs for keyboard navigation
   let counter = 1;
@@ -164,63 +211,58 @@ dropdowns.forEach((d) => {
     item.setAttribute("nav-child-id", counter);
     counter++;
   });
+  counter = undefined;
 
   // Event listeners
-  d.addEventListener("mouseover", () => d.classList.add("hovered"));
-  d.addEventListener("mouseout", () => d.classList.remove("hovered"));
+  d.addEventListener("mouseenter", () => {
+    d.classList.add("hover");
+  });
+  d.addEventListener("mouseleave", () => {
+    d.classList.remove("hover");
+  });
 
-  dButton.addEventListener("focusout", () => d.classList.remove("focused"));
-  dButton.addEventListener("focusin", () => d.classList.add("focused"));
+  items.forEach((item) => {
+    item.addEventListener("click", () => {
+      closeDropdown();
+    });
+  });
 
   dButton.addEventListener("click", () => {
-    d.classList.toggle("toggled");
-
-    getDropDownState().toggled ? openDropdown(d) : closeDropdown(d);
+    d.classList.contains("open") ? closeDropdown() : openDropdown();
   });
 
-  d.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault;
-      openDropdown(d);
+  // Handle key inputs
+  dButton.addEventListener("keydown", (e) => {
+    if (e.key === " " || e.key === "Enter") {
+      e.preventDefault();
+      e.stopPropagation();
+      d.classList.contains("open") ? closeDropdown() : openDropdown();
+    } else if (e.key === "Escape") {
+      closeDropdown();
     }
   });
 
-  function getDropDownState() {
-    const isFocused = d.classList.contains("focused");
-    const isToggled = d.classList.contains("toggled");
+  dList.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeDropdown();
+  });
 
-    return { focused: isFocused, toggled: isToggled };
+  function openDropdown() {
+    closeAllDropdowns();
+    d.classList.add("open");
+    dList.setAttribute("aria-expanded", "true");
+    setTimeout(() => items[0].focus(), 50);
+
+    dList.addEventListener("transitionend", () => {});
+    console.log("o");
   }
+  function closeDropdown() {
+    closeAllDropdowns();
+    d.classList.remove("open");
+    d.classList.remove("hover");
+    dList.setAttribute("aria-expanded", "false");
 
-  // Pressing esc when
-  window.addEventListener("keydown", (e) => {
-    const state = getDropDownState();
-
-    if (e.key === "Escape" && state.toggled) {
-      // Remove ope
-      d.classList.remove("toggled");
-    }
-  });
-});
-
-function openDropdown(dropdown) {
-  dropdown.classList.add("toggled");
-  dropdown.classList.add("focused");
-}
-function closeDropdown(dropdown) {
-  dropdown.classList.remove("toggled");
-  dropdown.classList.remove("focused");
-  dropdown.classList.remove("hovered");
-}
-
-window.addEventListener("keydown", (e) => {
-  // Close any toggled dropdown when pressing esc
-  if (e.key === "Escape") {
-    dropdowns.forEach((d) => {
-      if (d.classList.contains("toggled") || d.classList.contains("focused")) {
-        closeDropdown(d);
-      }
-    });
+    dButton.focus();
+    console.log("c");
   }
 });
 

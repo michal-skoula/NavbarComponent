@@ -8,6 +8,17 @@ The layout is defined in `navigation.js` using a simple schema that can easily b
 
 ### How to use
 
+In your tailwind theme config, define the `nav` breakpoint:
+
+```css
+// --breakpoint-md
+@theme {
+  --breakpoint-nav: 48rem;
+}
+```
+
+Note: you cannot use a css variable for this, tailwind isn't smart enough to compute it
+
 The navigation expects all content of the page **other than the navigation** to be inside of a wrapper with an id of `page` like so:
 
 ```html

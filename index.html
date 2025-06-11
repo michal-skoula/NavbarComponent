@@ -10,7 +10,7 @@
     <header id="header" class="sticky top-0 z-30">
       <nav
         id="navbar"
-        class="grid w-full grid-cols-3 items-center bg-white p-8 shadow-sm transition-transform duration-300 ease-in-out motion-reduce:transition-none max-sm:translate-y-0 max-sm:grid-cols-2 [&.collapsed]:max-sm:translate-y-[-90%]"
+        class="max-nav:translate-y-0 max-nav:grid-cols-2 [&.collapsed]:max-nav:translate-y-[-90%] grid w-full grid-cols-3 items-center bg-white p-8 shadow-sm transition-transform duration-300 ease-in-out motion-reduce:transition-none"
       >
         <!-- Tab navigation menu skip link -->
         <a
@@ -26,7 +26,7 @@
         </div>
 
         <!-- Center -->
-        <ul class="flex gap-4 justify-self-center max-sm:hidden">
+        <ul class="max-nav:hidden flex gap-4 justify-self-center">
           <li class="">
             <a href="#" class="inline-block p-3 underline">Home</a>
           </li>
@@ -34,64 +34,90 @@
             <a href="#" class="inline-block p-3 underline">About</a>
           </li>
 
-          <li class="group relative">
-            <button href="#test" class="p-3">Projekty</button>
-            <!-- Dropdown buffer zone: now between button and dropdown -->
-            <div
-              class="inset-0 -bottom-2 left-0 z-40 w-[250%] bg-orange-300/0 group-hover:absolute"
-              style="clip-path: polygon(100% 100%, 0 0, 0 100%, 100% 100%)"
-            ></div>
+          <li class="group relative" a nav-submenu>
+            <button class="">
+              <p class="cursor-pointer p-3 underline">
+                Projekty
+                <!--after:inline-flex after:pl-1 after:content-['▼']-->
+              </p>
+            </button>
+            <!-- Navigation dropdown -->
             <ul
-              class="absolute top-[110%] left-0 z-50 hidden w-[max-content] flex-col rounded-xl bg-slate-200 p-4 group-hover:flex [&>li]:hover:bg-slate-300"
+              class="absolute top-full z-50 hidden w-[max-content] flex-col rounded-xl bg-slate-200 p-4 group-[.hover]:flex group-[.open]:flex [&>li]:hover:bg-slate-300"
             >
+              <!-- before:absolute before:-inset-2 before:-top-14 before:-bottom-2 before:left-0 before:-z-10 before:hidden before:h-[60px] before:w-full before:bg-red-500/90 before:content-[''] before:[clip-path:polygon(100%_100%,0_0,0_100%,100%_100%)] group-[.hover]:before:flex before:[.open]:before:flex-->
               <li>
-                <a href="#" class="inline-block p-3 underline"
+                <a href="#conent" class="inline-block p-3"
                   >Modernizace bytového komplexu</a
                 >
               </li>
               <li>
-                <a href="#" class="inline-block p-3 underline"
+                <a href="#conent" class="inline-block p-3"
                   >Design japosnské zahrady</a
                 >
               </li>
               <li>
-                <a href="#" class="inline-block p-3 underline"
+                <a href="#conent" class="inline-block p-3"
                   >Vedení nového potrubí</a
                 >
               </li>
               <li>
-                <a href="#" class="inline-block p-3 underline"
+                <a href="#" class="inline-block p-3"
                   >Modernizace bytového komplexu</a
                 >
               </li>
               <li>
-                <a href="#" class="inline-block p-3 underline"
+                <a href="#" class="inline-block p-3"
                   >Design japosnské zahrady</a
                 >
               </li>
               <li>
-                <a href="#" class="inline-block p-3 underline"
-                  >Vedení nového potrubí</a
-                >
+                <a href="#" class="inline-block p-3">Vedení nového potrubí</a>
               </li>
             </ul>
           </li>
-
-          <!-- Navigation with submenu -->
-          <!-- <li class="group relative h-max" nav-submenu="true"> -->
-          <!-- This is the button for toggling -->
-          <!-- <button href="#" class="peer underline">Projects</button> -->
-          <!-- These are the children that are toggled-->
-          <!-- <ul
-              class="absolute top-4 hidden flex-col gap-3 bg-slate-200 p-3 group-hover:flex group-hover:bg-amber-300!"
-              aria-hidden="true"
-              inert="true"
+          <li class="group relative" b nav-submenu>
+            <button class="">
+              <p class="cursor-pointer p-3 underline">
+                Projects
+                <!--after:inline-flex after:pl-1 after:content-['▼']-->
+              </p>
+            </button>
+            <!-- Navigation dropdown -->
+            <ul
+              class="absolute top-full z-50 hidden w-[max-content] flex-col rounded-xl bg-slate-200 p-4 group-[.hover]:flex group-[.open]:flex [&>li]:hover:bg-slate-300"
             >
-              <li><a href="#" aria-hidden="true">Test</a></li>
-              <li><a href="#" aria-hidden="true">Test</a></li>
-              <li><a href="#" aria-hidden="true">Test</a></li>
+              <!-- before:absolute before:-inset-2 before:-top-14 before:-bottom-2 before:left-0 before:-z-10 before:hidden before:h-[60px] before:w-full before:bg-red-500/90 before:content-[''] before:[clip-path:polygon(100%_100%,0_0,0_100%,100%_100%)] group-[.hover]:before:flex before:[.open]:before:flex-->
+              <li>
+                <a href="#conent" class="inline-block p-3"
+                  >Modernizace bytového komplexu</a
+                >
+              </li>
+              <li>
+                <a href="#conent" class="inline-block p-3"
+                  >Design japosnské zahrady</a
+                >
+              </li>
+              <li>
+                <a href="#conent" class="inline-block p-3"
+                  >Vedení nového potrubí</a
+                >
+              </li>
+              <li>
+                <a href="#" class="inline-block p-3"
+                  >Modernizace bytového komplexu</a
+                >
+              </li>
+              <li>
+                <a href="#" class="inline-block p-3"
+                  >Design japosnské zahrady</a
+                >
+              </li>
+              <li>
+                <a href="#" class="inline-block p-3">Vedení nového potrubí</a>
+              </li>
             </ul>
-          </li> -->
+          </li>
         </ul>
 
         <!-- Right side-->
@@ -102,7 +128,7 @@
 
           <button
             id="slideoverOpenBtn"
-            class="cursor-pointer bg-slate-200 p-3 sm:hidden"
+            class="nav:hidden cursor-pointer bg-slate-200 p-3"
             aria-label="Open navigation"
             aria-expanded="false"
             aria-controls="slideover"
@@ -115,7 +141,7 @@
       <nav
         inert="true"
         id="slideover"
-        class="fixed top-0 right-0 z-50 h-screen w-[50%] max-w-full translate-x-[100%] bg-slate-100 p-8 transition-transform duration-300 ease-in-out motion-reduce:transition-none [&.open]:max-sm:translate-x-0"
+        class="[&.open]:max-nav:translate-x-0 fixed top-0 right-0 z-50 h-screen w-[50%] max-w-full translate-x-[100%] bg-slate-100 p-8 transition-transform duration-300 ease-in-out motion-reduce:transition-none"
       >
         <button
           id="slideoverCloseBtn"
@@ -135,7 +161,7 @@
       </nav>
       <div
         id="backdrop"
-        class="fixed inset-0 z-40 opacity-0 transition-opacity duration-200 ease-in-out motion-reduce:transition-none max-sm:bg-black [&.shown]:max-sm:opacity-70"
+        class="max-nav:bg-black [&.shown]:max-nav:opacity-70 fixed inset-0 z-40 opacity-0 transition-opacity duration-200 ease-in-out motion-reduce:transition-none"
         inert="true"
         aria-hidden="true"
       ></div>
