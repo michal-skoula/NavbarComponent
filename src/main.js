@@ -171,56 +171,89 @@ class Dropdown {
   /** @type {HTMLElement[]} */
   links;
 
-  constructor(dropdownElem) {
+  constructor(dropdownElem, id = null) {
     this.dropdown = dropdownElem;
     this.dButton = this.dropdown.querySelector(":scope > button");
     this.dList = this.dropdown.querySelector(":scope > ul");
     this.links = this.dList.querySelectorAll(":scope > li > a");
+    this.menuId = `nav-dropdown-menu-${id}` ?? null;
 
     this.registerBasicEventListeners();
     this.registerKeyboardInputEventListeners();
+
+    this.setAriaAttributes();
   }
 
   isOpen() {
     return this.dropdown.classList.contains("open");
   }
 
-  openDropdown() {
-    closeAllDropdowns();
-    this.dList.addEventListener("transitionend&", this.setFocusOnFirstLink, {
-      once: true,
-    });
+  openDropdown(onlyAria = false) {
+    if (!onlyAria) {
+      closeAllDropdowns();
 
-    this.dropdown.classList.add("open");
+      this.dList.addEventListener("transitionend", this.setFocusOnFirstLink, {
+        once: true,
+      });
+      // Fallback if there is no transition set
+      this.setFocusOnFirstLink();
+
+      this.dropdown.classList.add("open");
+    }
+
+    this.dList.setAttribute("aria-hidden", "false");
+    this.dButton.setAttribute("aria-expanded", "true");
   }
 
-  closeDropdown(shouldFocus = true) {
-    this.dropdown.classList.remove("open");
-    this.dropdown.classList.remove("hover");
+  closeDropdown(shouldFocus = true, onlyAria = false) {
+    if (!onlyAria) {
+      this.dropdown.classList.remove("open");
+      this.dropdown.classList.remove("hover");
+    }
 
     if (shouldFocus) {
       this.dButton.focus();
     }
+
+    this.dList.setAttribute("aria-hidden", "true");
+    this.dButton.setAttribute("aria-expanded", "false");
   }
 
-  setFocusOnFirstLink() {
-    console.log("focusing");
-    setTimeout(() => this.links[0].focus(), 10);
+  setFocusOnFirstLink = () => {
+    setTimeout(() => this.links[0]?.focus(), 10);
+  };
+
+  setAriaAttributes() {
+    this.dButton.setAttribute("aria-haspopup", "true");
+    this.dButton.setAttribute("aria-expanded", "false");
+
+    this.dList.setAttribute("aria-hidden", "true");
+    this.dList.setAttribute("role", "menu");
+
+    if (this.menuId) {
+      this.dList.setAttribute("id", this.menuId);
+      this.dButton.setAttribute("aria-controls", this.menuId);
+    }
+
+    this.links.forEach((link) => {
+      link.setAttribute("role", "menuitem");
+    });
   }
 
   registerBasicEventListeners() {
     // If any dropdown is toggled open, don't open another one on hover
     this.dropdown.addEventListener("mouseenter", () => {
       for (const d of dropdowns) {
-        if (d.isOpen()) {
-          return;
-        }
+        if (d.isOpen()) return;
       }
+
       this.dropdown.classList.add("hover");
+      this.openDropdown(true);
     });
 
     this.dropdown.addEventListener("mouseleave", () => {
       this.dropdown.classList.remove("hover");
+      this.closeDropdown(false, true);
     });
 
     // Close when any link is clicked
@@ -265,8 +298,13 @@ const dropdownElems = document.querySelectorAll("li[nav-submenu]");
 
 /** @type {Dropdown[]} */
 let dropdowns = [];
+let idCounter = 1;
 dropdownElems.forEach((d) => {
-  dropdowns.push(new Dropdown(d));
+  // Remove ARIA from <li>, move to button
+
+  // Pass unique id to Dropdown
+  dropdowns.push(new Dropdown(d, idCounter));
+  idCounter++;
 });
 
 // Close all created dropdowns
@@ -280,7 +318,7 @@ function closeAllDropdowns() {
 document.addEventListener("click", (e) => {
   dropdowns.forEach((d) => {
     if (
-      d.isOpen &&
+      d.isOpen() &&
       !(e.target === d.dropdown || d.dropdown.contains(e.target))
     ) {
       d.closeDropdown(false);
