@@ -314,14 +314,16 @@ function closeAllDropdowns() {
   });
 }
 
-// Closes dropdown automatically when clicking elsewhere
-document.addEventListener("click", (e) => {
-  dropdowns.forEach((d) => {
-    if (
-      d.isOpen() &&
-      !(e.target === d.dropdown || d.dropdown.contains(e.target))
-    ) {
-      d.closeDropdown(false);
-    }
+// Closes dropdown automatically when clicking or focusing elsewhere
+["click", "focusin"].forEach((eventType) => {
+  document.addEventListener(eventType, (e) => {
+    dropdowns.forEach((d) => {
+      if (
+        d.isOpen() &&
+        !(e.target === d.dropdown || d.dropdown.contains(e.target))
+      ) {
+        d.closeDropdown(false);
+      }
+    });
   });
 });
