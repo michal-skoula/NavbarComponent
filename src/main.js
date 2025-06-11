@@ -1,6 +1,6 @@
 import "./style.css";
 
-/**
+/*
  * ------------------
  *   Elements setup
  * ------------------
@@ -84,7 +84,7 @@ window.addEventListener("scroll", () => {
 });
 skipNavigation.addEventListener("click", closeSlideover);
 
-/**
+/*
  * -------------------
  *   Slideover logic
  * -------------------
@@ -152,123 +152,132 @@ function setNavStates({ isMobile, isOpen }) {
     : (body.style.overflow = "");
 }
 
-/**
+/*
  * ------------------
  *   Dropdown logic
  * ------------------
  */
 
-/** @type HTMLElement[] */
-const dropdowns = document.querySelectorAll("li[nav-submenu]");
+class Dropdown {
+  /** @type {HTMLElement} */
+  dropdown;
 
-// Closes previously open dropdown before opening the current one
+  /** @type {HTMLElement} */
+  dButton;
+
+  /** @type {HTMLElement} */
+  dList;
+
+  /** @type {HTMLElement[]} */
+  links;
+
+  constructor(dropdownElem) {
+    this.dropdown = dropdownElem;
+    this.dButton = this.dropdown.querySelector("& > button");
+    this.dList = this.dropdown.querySelector("& > ul");
+    this.links = this.dList.querySelectorAll("& > li > a");
+
+    this.registerBasicEventListeners();
+    this.registerKeyboardInputEventListeners();
+  }
+
+  isOpen() {
+    return this.dropdown.classList.contains("open");
+  }
+
+  openDropdown() {
+    closeAllDropdowns();
+    this.dList.addEventListener("transitionend", this.setFocusOnFirstLink());
+    this.dList.removeEventListener("transitionend", this.setFocusOnFirstLink());
+
+    this.dropdown.classList.add("open");
+  }
+
+  closeDropdown(shouldFocus = true) {
+    this.dropdown.classList.remove("open");
+    this.dropdown.classList.remove("hover");
+
+    if (shouldFocus) {
+      this.dButton.focus();
+    }
+  }
+
+  setFocusOnFirstLink() {
+    console.log("focusing");
+    setTimeout(() => this.links[0].focus(), 10);
+  }
+
+  registerBasicEventListeners() {
+    // If any dropdown is toggled open, don't open another one on hover
+    this.dropdown.addEventListener("mouseenter", () => {
+      for (const d of dropdowns) {
+        if (d.isOpen()) {
+          return;
+        }
+      }
+      this.dropdown.classList.add("hover");
+    });
+
+    this.dropdown.addEventListener("mouseleave", () => {
+      this.dropdown.classList.remove("hover");
+    });
+
+    // Close when any link is clicked
+    this.links.forEach((link) => {
+      link.addEventListener("click", () => {
+        this.closeDropdown();
+      });
+    });
+
+    // Toggle open when clicked
+    this.dButton.addEventListener("click", () => {
+      this.dropdown.classList.contains("open")
+        ? this.closeDropdown()
+        : this.openDropdown();
+    });
+  }
+
+  registerKeyboardInputEventListeners() {
+    // Handle key inputs
+    this.dButton.addEventListener("keydown", (e) => {
+      if (e.key === " " || e.key === "Enter") {
+        e.preventDefault();
+        e.stopPropagation();
+        this.isOpen() ? this.closeDropdown() : this.openDropdown();
+      } else if (e.key === "Escape") {
+        this.closeDropdown();
+      }
+    });
+
+    this.dList.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") this.closeDropdown();
+    });
+  }
+}
+
+/** @type {HTMLElement[]} */
+const dropdownElems = document.querySelectorAll("li[nav-submenu]");
+
+/** @type {Dropdown[]} */
+let dropdowns = [];
+dropdownElems.forEach((d) => {
+  dropdowns.push(new Dropdown(d));
+});
+
 function closeAllDropdowns() {
   dropdowns.forEach((d) => {
-    d.classList.remove("open");
-    //TODO: remove aria-open attribute
+    d.closeDropdown(false);
   });
 }
 
 // Closes dropdown automatically when clicking elsewhere
 document.addEventListener("click", (e) => {
   dropdowns.forEach((d) => {
-    if (d === e.target || d.contains(e.target)) return;
-    closeAllDropdowns();
-  });
-});
-
-// Listen for focus changes on the whole document
-// document.addEventListener("focusin", (e) => {
-//   console.log(e.target);
-//   dropdowns.forEach((d) => {
-//     if (!(d === e.target || d.contains(e.target))) {
-//       console.log("out");
-//     }
-//     return;
-//   });
-//   // dropdowns.forEach((d) => {
-//   //   // If the newly focused element is NOT the dropdown or a child, close it
-//   //   if (!(d === e.target || d.contains(e.target))) {
-//   //     d.classList.remove("open");
-//   //   }
-//   // });
-// });
-
-// Dropdown setup and logic
-dropdowns.forEach((d) => {
-  /** @type HTMLElement */
-  const dButton = d.querySelector("& > button");
-
-  /** @type HTMLElement */
-  const dList = d.querySelector("& > ul");
-
-  /** @type HTMLElement[] */
-  const items = dList.querySelectorAll("& > li > a");
-
-  // Set IDs for keyboard navigation
-  let counter = 1;
-  items.forEach((item) => {
-    item.setAttribute("nav-child-id", counter);
-    counter++;
-  });
-  counter = undefined;
-
-  // Event listeners
-  d.addEventListener("mouseenter", () => {
-    d.classList.add("hover");
-  });
-  d.addEventListener("mouseleave", () => {
-    d.classList.remove("hover");
-  });
-
-  items.forEach((item) => {
-    item.addEventListener("click", () => {
-      closeDropdown();
-    });
-  });
-
-  dButton.addEventListener("click", () => {
-    d.classList.contains("open") ? closeDropdown() : openDropdown();
-  });
-
-  // Handle key inputs
-  dButton.addEventListener("keydown", (e) => {
-    if (e.key === " " || e.key === "Enter") {
-      e.preventDefault();
-      e.stopPropagation();
-      d.classList.contains("open") ? closeDropdown() : openDropdown();
-    } else if (e.key === "Escape") {
-      closeDropdown();
+    if (
+      d.isOpen &&
+      !(e.target === d.dropdown || d.dropdown.contains(e.target))
+    ) {
+      d.closeDropdown(false);
     }
   });
-
-  dList.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeDropdown();
-  });
-
-  function openDropdown() {
-    closeAllDropdowns();
-    d.classList.add("open");
-    dList.setAttribute("aria-expanded", "true");
-    setTimeout(() => items[0].focus(), 50);
-
-    dList.addEventListener("transitionend", () => {});
-    console.log("o");
-  }
-  function closeDropdown() {
-    closeAllDropdowns();
-    d.classList.remove("open");
-    d.classList.remove("hover");
-    dList.setAttribute("aria-expanded", "false");
-
-    dButton.focus();
-    console.log("c");
-  }
 });
-
-// Right now im thinking .hovered, .focused and .toggled apply exactly the same
-// styles but:
-//    focused can only be removed by unfocusing
-//    hovered can only be removed by unhovering
-//    toggled can be removed by: selecting a new dropdown, pressing esc, clicking away
-//                               i think i can use if not hovered and clicks!
