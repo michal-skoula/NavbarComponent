@@ -173,9 +173,9 @@ class Dropdown {
 
   constructor(dropdownElem) {
     this.dropdown = dropdownElem;
-    this.dButton = this.dropdown.querySelector("& > button");
-    this.dList = this.dropdown.querySelector("& > ul");
-    this.links = this.dList.querySelectorAll("& > li > a");
+    this.dButton = this.dropdown.querySelector(":scope > button");
+    this.dList = this.dropdown.querySelector(":scope > ul");
+    this.links = this.dList.querySelectorAll(":scope > li > a");
 
     this.registerBasicEventListeners();
     this.registerKeyboardInputEventListeners();
@@ -187,8 +187,9 @@ class Dropdown {
 
   openDropdown() {
     closeAllDropdowns();
-    this.dList.addEventListener("transitionend", this.setFocusOnFirstLink());
-    this.dList.removeEventListener("transitionend", this.setFocusOnFirstLink());
+    this.dList.addEventListener("transitionend&", this.setFocusOnFirstLink, {
+      once: true,
+    });
 
     this.dropdown.classList.add("open");
   }
@@ -239,18 +240,22 @@ class Dropdown {
 
   registerKeyboardInputEventListeners() {
     // Handle key inputs
-    this.dButton.addEventListener("keydown", (e) => {
-      if (e.key === " " || e.key === "Enter") {
-        e.preventDefault();
-        e.stopPropagation();
-        this.isOpen() ? this.closeDropdown() : this.openDropdown();
-      } else if (e.key === "Escape") {
-        this.closeDropdown();
-      }
-    });
+    const events = ["keydown", "touchstart"];
 
-    this.dList.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") this.closeDropdown();
+    events.forEach((eventName) => {
+      this.dButton.addEventListener(eventName, (e) => {
+        if (e.key === " " || e.key === "Enter") {
+          e.preventDefault();
+          e.stopPropagation();
+          this.isOpen() ? this.closeDropdown() : this.openDropdown();
+        } else if (e.key === "Escape") {
+          this.closeDropdown();
+        }
+      });
+
+      this.dList.addEventListener(eventName, (e) => {
+        if (e.key === "Escape") this.closeDropdown();
+      });
     });
   }
 }
@@ -264,6 +269,7 @@ dropdownElems.forEach((d) => {
   dropdowns.push(new Dropdown(d));
 });
 
+// Close all created dropdowns
 function closeAllDropdowns() {
   dropdowns.forEach((d) => {
     d.closeDropdown(false);
